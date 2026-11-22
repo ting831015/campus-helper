@@ -5,6 +5,12 @@
 let currentView = 'menu';   // 目前顯示的畫面：'menu' 或某個功能頁的 id
 
 function showTab(tabId) {
+  // 離開讀書計時器頁面時（按返回或切到其他頁），正在計時就自動暫停
+  // timerPause() 只會在「讀書中／休息中」才暫停；暫停後白噪音會停、背景音樂恢復（renderTimer → updateWhiteNoise）
+  if (currentView === 'tab-timer' && tabId !== 'tab-timer') {
+    timerPause();
+  }
+
   currentView = tabId;
 
   const panels = document.querySelectorAll('.tab-panel');
