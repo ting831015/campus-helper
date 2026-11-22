@@ -59,3 +59,9 @@ initExpense();
 initSubjects();
 initTimer();
 initMusic();
+
+// 離線功能：啟動 service worker（sw.js），第一次打開時把所有檔案存到手機裡，之後沒網路也能打開
+// 只有 https 網址（GitHub Pages）或 Live Server 才能用；直接雙擊 index.html 打開時會自動略過
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function () {});
+}
