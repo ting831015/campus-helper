@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Life Helper</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 加到主畫面用的設定 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b6ea5">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Campus Helper">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+
+  <!-- 開始畫面：選擇語言 -->
+  <div id="splash" class="splash">
+    <h1>Campus Life Helper</h1>
+    <p>請選擇語言 / Choose a language</p>
+    <div class="lang-buttons">
+      <button class="lang-btn" data-lang="zh">中文版</button>
+      <button class="lang-btn" data-lang="en">English</button>
+    </div>
+  </div>
+
+  <header id="app-header" hidden>
+    <button id="back-btn" class="back-btn" data-i18n="back">&lt; 返回</button>
+    <h1>Campus Life Helper</h1>
+    <button id="music-btn" class="music-btn">🎵</button>
+  </header>
+
+  <main>
+    <!-- 選單：四個功能按鈕 -->
+    <section id="menu" class="menu" hidden>
+      <button class="menu-btn" data-tab="tab-todo">
+        <span class="menu-title" data-i18n="menuTodo">待辦</span>
+        <span class="menu-sub" data-i18n="menuTodoSub">To-do List</span>
+      </button>
+      <button class="menu-btn" data-tab="tab-calendar">
+        <span class="menu-title" data-i18n="menuCal">行事曆</span>
+        <span class="menu-sub" data-i18n="menuCalSub">Calendar</span>
+      </button>
+      <button class="menu-btn" data-tab="tab-expense">
+        <span class="menu-title" data-i18n="menuExp">記帳</span>
+        <span class="menu-sub" data-i18n="menuExpSub">Expense Tracker</span>
+      </button>
+      <button class="menu-btn" data-tab="tab-timer">
+        <span class="menu-title" data-i18n="menuTimer">計時</span>
+        <span class="menu-sub" data-i18n="menuTimerSub">Study Timer</span>
+      </button>
+    </section>
+
+    <!-- Module A：待辦事項 -->
+    <section id="tab-todo" class="tab-panel" hidden>
+      <h2 data-i18n="todoHeading">待辦事項</h2>
+
+      <div class="card form-row">
+        <input id="todo-title" type="text" data-i18n-placeholder="todoPlaceholder" placeholder="待辦事項（例：作業、報告、繳費）">
+        <label class="field"><span data-i18n="deadlineOptional">截止日（選填）</span><input id="todo-deadline" type="date"></label>
+        <label class="field"><span data-i18n="statusLabel">狀態</span>
+          <select id="todo-status">
+            <option value="todo" data-i18n="statusTodo">未完成</option>
+            <option value="urgent" data-i18n="statusUrgent">緊急</option>
+            <option value="done" data-i18n="statusDone">已完成</option>
+          </select>
+        </label>
+        <button id="todo-add" class="primary-btn" data-i18n="add">新增</button>
+      </div>
+
+      <p class="legend">
+        <span class="dot dot-todo"></span><span data-i18n="statusTodo">未完成</span>
+        <span class="dot dot-urgent"></span><span data-i18n="statusUrgent">緊急</span>
+        <span class="dot dot-done"></span><span data-i18n="statusDone">已完成</span>
+      </p>
+
+      <ul id="todo-list" class="item-list"></ul>
+    </section>
+
+    <!-- Module D：行事曆 -->
+    <section id="tab-calendar" class="tab-panel" hidden>
+      <h2 data-i18n="calHeading">行事曆</h2>
+
+      <div class="card form-grid">
+        <input id="ev-title" type="text" data-i18n-placeholder="evPlaceholder" placeholder="行程名稱（例：小組討論）">
+        <input id="ev-date" type="date">
+        <input id="ev-time" type="time">
+        <button id="ev-add" class="primary-btn" data-i18n="add">新增</button>
+      </div>
+
+      <div class="card">
+        <div class="cal-header">
+          <button id="cal-prev" class="nav-btn">&lt;</button>
+          <span id="cal-title"></span>
+          <button id="cal-next" class="nav-btn">&gt;</button>
+        </div>
+        <div id="cal-grid" class="cal-grid"></div>
+      </div>
+
+      <h3 id="ev-day-title" class="day-title"></h3>
+      <ul id="ev-list" class="item-list"></ul>
+    </section>
+
+    <!-- Module B：記帳 -->
+    <section id="tab-expense" class="tab-panel" hidden>
+      <h2 data-i18n="expHeading">記帳</h2>
+
+      <div class="card form-grid">
+        <input id="exp-amount" type="number" min="0" data-i18n-placeholder="amountPlaceholder" placeholder="金額">
+        <select id="exp-category"></select>
+        <input id="exp-date" type="date">
+        <input id="exp-note" type="text" data-i18n-placeholder="notePlaceholder" placeholder="備註（選填）">
+        <button id="exp-add" class="primary-btn" data-i18n="add">新增</button>
+      </div>
+
+      <div class="card">
+        <label><span data-i18n="monthLabel">月份</span> <input id="exp-month" type="month"></label>
+        <p class="exp-total"><span data-i18n="totalLabel">總額：</span><span id="exp-total">NT$ 0</span></p>
+        <p id="exp-highlight" class="exp-highlight"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="catChartTitle">分類花費</h3>
+        <div id="exp-cat-chart" class="hbar-chart"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="dayChartTitle">每日花費</h3>
+        <div id="exp-day-chart" class="vbar-chart"></div>
+        <div id="exp-legend" class="chart-legend"></div>
+      </div>
+
+      <h3 class="day-title" data-i18n="dailyTitle">每日明細</h3>
+      <div id="exp-daily"></div>
+    </section>
+
+    <!-- Module C：讀書計時器 -->
+    <section id="tab-timer" class="tab-panel" hidden>
+      <h2 data-i18n="timerHeading">讀書計時器</h2>
+
+      <div class="timer-box">
+        <p id="timer-phase" class="timer-phase">準備開始</p>
+        <p id="timer-display" class="timer-display">25:00</p>
+        <div class="timer-buttons">
+          <button id="timer-start" data-i18n="start">開始</button>
+          <button id="timer-pause" data-i18n="pause">暫停</button>
+          <button id="timer-reset" data-i18n="reset">重設</button>
+        </div>
+      </div>
+
+      <div class="timer-settings">
+        <label><span data-i18n="studyMinLabel">讀書（分鐘）</span><input id="timer-study-min" type="number" min="1" max="120"></label>
+        <label><span data-i18n="breakMinLabel">休息（分鐘）</span><input id="timer-break-min" type="number" min="1" max="60"></label>
+      </div>
+
+      <!-- 科目：選這次讀哪一科；可自行新增／刪除 -->
+      <div class="subject-box">
+        <label class="subject-select">
+          <span data-i18n="subjectLabel">這次讀的科目</span>
+          <select id="timer-subject"></select>
+        </label>
+        <div class="subject-add-row">
+          <input id="subject-new" type="text" maxlength="20" data-i18n-placeholder="subjectPlaceholder" placeholder="新增科目（例：ALU、OS）">
+          <button id="subject-add" class="primary-btn" data-i18n="add">新增</button>
+        </div>
+        <ul id="subject-list" class="subject-list"></ul>
+      </div>
+
+      <!-- 白噪音開關：勾選後，讀書時間會播白噪音（背景音樂自動暫停） -->
+      <label class="noise-toggle">
+        <input id="timer-noise" type="checkbox">
+        <span data-i18n="whiteNoiseLabel">讀書時播放白噪音：海浪聲</span>
+      </label>
+      <p class="noise-credit" data-i18n="noiseCredit">海浪聲音效由 elevenlabs.io 生成</p>
+
+      <div class="timer-summary">
+        <p><span data-i18n="todayStudy">今日讀書：</span><span id="timer-today">0</span><span data-i18n="minutesUnit"> 分鐘</span></p>
+        <p><span data-i18n="weekStudy">本週讀書：</span><span id="timer-week">0</span><span data-i18n="minutesUnit"> 分鐘</span></p>
+      </div>
+
+      <!-- 今日科目圓餅圖：左邊圓餅、右邊各科分鐘與百分比 -->
+      <div class="study-pie-card">
+        <h3 data-i18n="pieTitle">今日科目比例</h3>
+        <div class="study-pie-row">
+          <div id="study-pie" class="study-pie"></div>
+          <ul id="study-pie-legend" class="study-pie-legend"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 照片放大檢視 -->
+  <div id="photo-viewer" class="photo-viewer" hidden>
+    <img id="photo-viewer-img" alt="photo">
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/expense.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/subjects.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+// 共用：中英文切換
+// 用法：t('key') 取得目前語言的文字；tf('key', { n: 3 }) 會把文字裡的 {n} 換成 3
+
+let currentLang = 'zh';
+
+const I18N = {
+  zh: {
+    back: '< 返回',
+    menuTodo: '待辦', menuTodoSub: 'To-do List',
+    menuCal: '行事曆', menuCalSub: 'Calendar',
+    menuExp: '記帳', menuExpSub: 'Expense Tracker',
+    menuTimer: '計時', menuTimerSub: 'Study Timer',
+    add: '新增',
+    del: '刪除',
+
+    // 待辦
+    todoHeading: '待辦事項',
+    todoPlaceholder: '待辦事項（例：作業、報告、繳費）',
+    deadlineOptional: '截止日（選填）',
+    statusLabel: '狀態',
+    statusTodo: '未完成',
+    statusUrgent: '緊急',
+    statusDone: '已完成',
+    todoEmpty: '目前沒有待辦事項',
+    todoNeedTitle: '請輸入待辦事項',
+    todoConfirmDelete: '確定要刪除這筆待辦？備註和照片也會一起刪除。',
+    noDeadline: '無截止日',
+    deadlinePrefix: '截止 {date}（{left}）',
+    daysLeft: '剩 {n} 天',
+    dueToday: '今天到期',
+    overdue: '已過期 {n} 天',
+    noteOpen: '備註',
+    noteClose: '收合',
+    notePlaceholder2: '備註：可以輸入任何文字',
+    addPhoto: '＋ 加入照片',
+    storageFull: '儲存空間不足，照片沒有加入。可以刪掉一些舊照片再試。',
+
+    // 行事曆
+    calHeading: '行事曆',
+    evPlaceholder: '行程名稱（例：小組討論）',
+    evNeedAll: '請輸入行程名稱、日期和時間',
+    calTitle: '{y} 年 {m} 月',
+    dayEvents: '{date} 的行程',
+    noEvents: '這天沒有行程',
+
+    // 記帳
+    expHeading: '記帳',
+    amountPlaceholder: '金額',
+    notePlaceholder: '備註（選填）',
+    monthLabel: '月份',
+    totalLabel: '總額：',
+    catChartTitle: '分類花費',
+    dayChartTitle: '每日花費',
+    dailyTitle: '每日明細',
+    expNeedAmount: '請輸入大於 0 的金額和日期',
+    noData: '這個月沒有資料',
+    noRecords: '這個月沒有記帳紀錄',
+    highlight: '花費最高的分類：{cat}（NT$ {catAmt}）　花費最高的一天：{day}（NT$ {dayAmt}）',
+    dayTotal: '共 NT$ {amt}',
+
+    // 計時器
+    timerHeading: '讀書計時器',
+    start: '開始',
+    pause: '暫停',
+    reset: '重設',
+    studyMinLabel: '讀書（分鐘）',
+    breakMinLabel: '休息（分鐘）',
+    todayStudy: '今日讀書：',
+    weekStudy: '本週讀書：',
+    minutesUnit: ' 分鐘',
+    musicOn: '背景音樂：開（點一下關閉）',
+    musicOff: '背景音樂：關（點一下開啟）',
+    whiteNoiseLabel: '讀書時播放白噪音：海浪聲（播放時背景音樂會暫停）',
+    noiseCredit: '海浪聲音效由 elevenlabs.io 生成',
+    subjectLabel: '這次讀的科目',
+    subjectNone: '未分類',
+    subjectPlaceholder: '新增科目（例：ALU、OS）',
+    subjectNeedName: '請輸入科目名稱',
+    subjectExists: '這個科目已經有了',
+    subjectConfirmDelete: '確定要刪除科目「{name}」嗎？（已記錄的讀書時間會保留）',
+    pieTitle: '今日科目比例',
+    noStudyToday: '今天還沒有完成的讀書時段',
+    pieValue: '{min} 分鐘（{pct}%）',
+    phaseIdle: '準備開始',
+    phaseStudy: '讀書中',
+    phaseBreak: '休息中',
+    phaseStudyPaused: '讀書暫停',
+    phaseBreakPaused: '休息暫停',
+
+    // 日期
+    weekdays: ['日', '一', '二', '三', '四', '五', '六'],
+    shortDate: '{m}/{d}（{w}）',
+
+    // 記帳分類（資料裡存的是中文名稱，這裡是顯示用的名稱）
+    categories: { '餐費': '餐費', '交通': '交通', '文具': '文具', '娛樂': '娛樂', '其他': '其他' }
+  },
+
+  en: {
+    back: '< Back',
+    menuTodo: 'To-do', menuTodoSub: 'Tasks and notes',
+    menuCal: 'Calendar', menuCalSub: 'Events by time',
+    menuExp: 'Expense', menuExpSub: 'Daily spending',
+    menuTimer: 'Timer', menuTimerSub: 'Pomodoro study',
+    add: 'Add',
+    del: 'Delete',
+
+    todoHeading: 'To-do List',
+    todoPlaceholder: 'Task (e.g. homework, report, payment)',
+    deadlineOptional: 'Deadline (optional)',
+    statusLabel: 'Status',
+    statusTodo: 'Not done',
+    statusUrgent: 'Urgent',
+    statusDone: 'Done',
+    todoEmpty: 'No tasks yet',
+    todoNeedTitle: 'Please enter a task.',
+    todoConfirmDelete: 'Delete this task? Its notes and photos will also be deleted.',
+    noDeadline: 'No deadline',
+    deadlinePrefix: 'Due {date} ({left})',
+    daysLeft: '{n} days left',
+    dueToday: 'due today',
+    overdue: '{n} days overdue',
+    noteOpen: 'Notes',
+    noteClose: 'Hide',
+    notePlaceholder2: 'Notes: type anything here',
+    addPhoto: '+ Add photos',
+    storageFull: 'Not enough storage space. The photos were not added. Delete some old photos and try again.',
+
+    calHeading: 'Calendar',
+    evPlaceholder: 'Event (e.g. group meeting)',
+    evNeedAll: 'Please enter the event name, date and time.',
+    calTitle: '{monthName} {y}',
+    dayEvents: 'Events on {date}',
+    noEvents: 'No events on this day',
+
+    expHeading: 'Expense Tracker',
+    amountPlaceholder: 'Amount',
+    notePlaceholder: 'Note (optional)',
+    monthLabel: 'Month',
+    totalLabel: 'Total: ',
+    catChartTitle: 'Spending by Category',
+    dayChartTitle: 'Spending by Day',
+    dailyTitle: 'Daily Details',
+    expNeedAmount: 'Please enter an amount greater than 0 and a date.',
+    noData: 'No data for this month',
+    noRecords: 'No records for this month',
+    highlight: 'Top category: {cat} (NT$ {catAmt})   Top day: {day} (NT$ {dayAmt})',
+    dayTotal: 'Total NT$ {amt}',
+
+    timerHeading: 'Study Timer',
+    start: 'Start',
+    pause: 'Pause',
+    reset: 'Reset',
+    studyMinLabel: 'Study (min)',
+    breakMinLabel: 'Break (min)',
+    todayStudy: 'Today: ',
+    weekStudy: 'This week: ',
+    minutesUnit: ' min',
+    musicOn: 'Music: on (tap to turn off)',
+    musicOff: 'Music: off (tap to turn on)',
+    whiteNoiseLabel: 'Play ocean-wave white noise while studying (pauses background music)',
+    noiseCredit: 'Ocean wave sound generated by elevenlabs.io',
+    subjectLabel: 'Subject',
+    subjectNone: 'Uncategorized',
+    subjectPlaceholder: 'New subject (e.g. ALU, OS)',
+    subjectNeedName: 'Please enter a subject name',
+    subjectExists: 'This subject already exists',
+    subjectConfirmDelete: 'Delete subject "{name}"? (Recorded study time will be kept)',
+    pieTitle: "Today's subjects",
+    noStudyToday: 'No completed study sessions today',
+    pieValue: '{min} min ({pct}%)',
+    phaseIdle: 'Ready',
+    phaseStudy: 'Studying',
+    phaseBreak: 'On break',
+    phaseStudyPaused: 'Study paused',
+    phaseBreakPaused: 'Break paused',
+
+    weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    shortDate: '{m}/{d} ({w})',
+    monthNames: ['January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November', 'December'],
+
+    categories: { '餐費': 'Food', '交通': 'Transport', '文具': 'Stationery', '娛樂': 'Entertainment', '其他': 'Other' }
+  }
+};
+
+// 取得目前語言的文字
+function t(key) {
+  return I18N[currentLang][key];
+}
+
+// 取得文字，並把 {名稱} 換成對應的值
+function tf(key, values) {
+  let text = t(key);
+  Object.keys(values).forEach(function (name) {
+    text = text.split('{' + name + '}').join(values[name]);
+  });
+  return text;
+}
+
+// 記帳分類的顯示名稱
+function catLabel(category) {
+  return t('categories')[category];
+}
+
+// 把畫面上固定的文字（有 data-i18n、data-i18n-placeholder 的元件）換成目前語言
+function applyLanguage() {
+  document.documentElement.lang = (currentLang === 'zh') ? 'zh-Hant' : 'en';
+
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+}
